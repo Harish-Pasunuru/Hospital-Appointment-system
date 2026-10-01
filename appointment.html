@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Book Appointment - Home Treats</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+<script src="auth.js"></script>
+
+<script>
+    requireLogin();
+</script>
+
+
+<header class="navbar">
+
+    <h2>🏥 Home Treats</h2>
+
+    <nav>
+
+        <a href="index.html">Home</a>
+
+        <a href="doctors.html">Doctors</a>
+
+        <a href="appointment.html">
+            Appointment
+        </a>
+
+        <a href="my-appointments.html">
+            My Appointments
+        </a>
+
+    </nav>
+
+</header>
+
+
+<div class="appointment-container">
+
+    <div class="appointment-card">
+
+        <h1>
+            📅 Book Appointment
+        </h1>
+
+        <p>
+            Please provide your health information.
+        </p>
+
+
+        <form id="appointmentForm">
+
+
+            <label>
+                Select Doctor
+            </label>
+
+
+            <select id="doctor" required>
+
+                <option value="">
+                    Select Doctor
+                </option>
+
+                <option>
+                    Dr. Priya - General Physician
+                </option>
+
+                <option>
+                    Dr. Rahul - Cardiologist
+                </option>
+
+                <option>
+                    Dr. Anjali - Dermatologist
+                </option>
+
+                <option>
+                    Dr. Kumar - Neurologist
+                </option>
+
+            </select>
+
+
+            <label>
+                Appointment Date
+            </label>
+
+
+            <input
+                type="date"
+                id="date"
+                required
+            >
+
+
+            <label>
+                Appointment Time
+            </label>
+
+
+            <input
+                type="time"
+                id="time"
+                required
+            >
+
+
+            <label>
+                Health Issue
+            </label>
+
+
+            <input
+                type="text"
+                id="healthIssue"
+                placeholder="Example: Fever"
+                required
+            >
+
+
+            <label>
+                Symptoms
+            </label>
+
+
+            <textarea
+                id="symptoms"
+                rows="5"
+                placeholder="Describe your symptoms..."
+                required
+            ></textarea>
+
+
+            <button type="submit">
+                Confirm Appointment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document
+.getElementById("appointmentForm")
+.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const user =
+            getCurrentUser();
+
+
+        if (!user) {
+
+            alert(
+                "Please login first."
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const appointment = {
+
+            patientEmail:
+                user.email,
+
+            patientName:
+                user.name,
+
+            doctor:
+                document
+                .getElementById("doctor")
+                .value,
+
+            date:
+                document
+                .getElementById("date")
+                .value,
+
+            time:
+                document
+                .getElementById("time")
+                .value,
+
+            healthIssue:
+                document
+                .getElementById("healthIssue")
+                .value,
+
+            symptoms:
+                document
+                .getElementById("symptoms")
+                .value,
+
+            status:
+                "Upcoming"
+
+        };
+
+
+        saveAppointment(
+            appointment
+        );
+
+
+        alert(
+            "✅ Appointment booked successfully!"
+        );
+
+
+        window.location.href =
+            "my-appointments.html";
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>

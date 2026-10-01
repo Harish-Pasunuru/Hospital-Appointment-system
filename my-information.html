@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Information - Home Treats</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<script src="auth.js"></script>
+
+<script>
+    requireLogin();
+</script>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <h2>🏥 Home Treats</h2>
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="doctors.html">
+            Doctors
+        </a>
+
+        <a href="branches.html">
+            Branches
+        </a>
+
+        <a href="appointment.html">
+            Appointment
+        </a>
+
+        <a href="my-information.html">
+            My Information
+        </a>
+
+        <a href="#"
+           onclick="logout(); return false;">
+            Logout
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= PAGE TITLE ================= -->
+
+<section class="info-hero">
+
+    <h1>👤 My Information</h1>
+
+    <p>
+        Your personal health and appointment information
+    </p>
+
+</section>
+
+
+<!-- ================= PATIENT INFORMATION ================= -->
+
+<section class="patient-dashboard">
+
+
+    <!-- PROFILE + HEALTH -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- PROFILE CARD -->
+
+        <div class="dashboard-card">
+
+            <h2>👤 My Profile</h2>
+
+            <div class="info-row">
+
+                <span>Full Name</span>
+
+                <strong id="profileName">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>Email</span>
+
+                <strong id="profileEmail">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span>Phone</span>
+
+                <strong id="profilePhone">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- HEALTH CARD -->
+
+        <div class="dashboard-card">
+
+            <h2>🩺 My Health Information</h2>
+
+            <div id="healthInformation">
+
+                <div class="no-information">
+
+                    <div class="no-info-icon">
+                        🩺
+                    </div>
+
+                    <h3>
+                        No Health Information Yet
+                    </h3>
+
+                    <p>
+                        Your health information will
+                        appear here after you book
+                        an appointment.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= APPOINTMENTS ================= -->
+
+    <div class="dashboard-card appointments-information">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📅 My Previous Appointments
+                </h2>
+
+                <p>
+                    Your appointment history
+                </p>
+
+            </div>
+
+            <a href="appointment.html"
+               class="new-appointment-button">
+
+                + New Appointment
+
+            </a>
+
+        </div>
+
+
+        <div id="previousAppointments">
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= LOGOUT ================= -->
+
+    <button
+        class="logout-button"
+        onclick="logout()">
+
+        🚪 Logout
+
+    </button>
+
+
+</section>
+
+
+<!-- ================= INFORMATION SCRIPT ================= -->
+
+<script>
+
+const currentUser = getCurrentUser();
+
+
+if (currentUser) {
+
+
+    /* PROFILE */
+
+    document
+        .getElementById("profileName")
+        .textContent =
+        currentUser.name;
+
+
+    document
+        .getElementById("profileEmail")
+        .textContent =
+        currentUser.email;
+
+
+    document
+        .getElementById("profilePhone")
+        .textContent =
+        currentUser.phone;
+
+
+    /* GET APPOINTMENTS */
+
+    const allAppointments =
+        getAppointments();
+
+
+    /* ONLY THIS USER'S APPOINTMENTS */
+
+    const myAppointments =
+        allAppointments.filter(
+
+            appointment =>
+
+                appointment.patientEmail ===
+                currentUser.email
+
+        );
+
+
+    const healthBox =
+        document.getElementById(
+            "healthInformation"
+        );
+
+
+    const appointmentBox =
+        document.getElementById(
+            "previousAppointments"
+        );
+
+
+    /* ================= HEALTH ================= */
+
+    if (myAppointments.length > 0) {
+
+
+        /*
+         * Show the most recent
+         * health information.
+         */
+
+        const latestAppointment =
+            myAppointments[
+                myAppointments.length - 1
+            ];
+
+
+        healthBox.innerHTML = `
+
+            <div class="health-details">
+
+                <div class="health-item">
+
+                    <span class="health-label">
+                        🩺 Health Issue
+                    </span>
+
+                    <strong>
+                        ${latestAppointment.healthIssue}
+                    </strong>
+
+                </div>
+
+
+                <div class="health-item">
+
+                    <span class="health-label">
+                        📋 Symptoms
+                    </span>
+
+                    <strong>
+                        ${latestAppointment.symptoms}
+                    </strong>
+
+                </div>
+
+
+                <div class="health-item">
+
+                    <span class="health-label">
+                        👨‍⚕️ Last Consulted Doctor
+                    </span>
+
+                    <strong>
+                        ${latestAppointment.doctor}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+    }
+
+
+    /* ================= APPOINTMENTS ================= */
+
+    if (myAppointments.length > 0) {
+
+
+        appointmentBox.innerHTML = "";
+
+
+        /*
+         * Show newest appointment first.
+         */
+
+        const sortedAppointments =
+            [...myAppointments].reverse();
+
+
+        sortedAppointments.forEach(
+
+            appointment => {
+
+
+                appointmentBox.innerHTML += `
+
+                    <div class="information-appointment">
+
+                        <div class="appointment-top">
+
+                            <h3>
+                                👨‍⚕️
+                                ${appointment.doctor}
+                            </h3>
+
+                            <span class="status-badge">
+                                ${appointment.status}
+                            </span>
+
+                        </div>
+
+
+                        <div class="appointment-details">
+
+                            <div>
+
+                                <span>
+                                    📅 Date
+                                </span>
+
+                                <strong>
+                                    ${appointment.date}
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    ⏰ Time
+                                </span>
+
+                                <strong>
+                                    ${appointment.time}
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    🩺 Health Issue
+                                </span>
+
+                                <strong>
+                                    ${appointment.healthIssue}
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    📋 Symptoms
+                                </span>
+
+                                <strong>
+                                    ${appointment.symptoms}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+        );
+
+
+    }
+
+    else {
+
+
+        appointmentBox.innerHTML = `
+
+            <div class="no-information">
+
+                <div class="no-info-icon">
+                    📅
+                </div>
+
+                <h3>
+                    No Previous Appointments
+                </h3>
+
+                <p>
+                    You haven't booked an
+                    appointment yet.
+                </p>
+
+                <a
+                    href="appointment.html"
+                    class="new-appointment-button">
+
+                    Book Your First Appointment
+
+                </a>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

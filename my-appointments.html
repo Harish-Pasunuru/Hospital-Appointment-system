@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Appointments - Home Treats</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+<script src="auth.js"></script>
+
+<script>
+    requireLogin();
+</script>
+
+
+<header class="navbar">
+
+    <h2>🏥 Home Treats</h2>
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="doctors.html">
+            Doctors
+        </a>
+
+        <a href="appointment.html">
+            Appointment
+        </a>
+
+        <a href="my-appointments.html">
+            My Appointments
+        </a>
+
+    </nav>
+
+</header>
+
+
+<div class="patient-dashboard">
+
+    <h1>
+        📅 My Appointments
+    </h1>
+
+
+    <div
+        id="appointments"
+        class="dashboard-card"
+    ></div>
+
+</div>
+
+
+<script>
+
+const user =
+    getCurrentUser();
+
+
+const appointments =
+    getAppointments();
+
+
+const myAppointments =
+    appointments.filter(
+
+        appointment =>
+            appointment.patientEmail ===
+            user.email
+
+    );
+
+
+const container =
+    document.getElementById(
+        "appointments"
+    );
+
+
+if (myAppointments.length === 0) {
+
+    container.innerHTML = `
+
+        <div class="empty-card">
+
+            <h2>
+                No Appointments
+            </h2>
+
+            <p>
+                You haven't booked
+                an appointment yet.
+            </p>
+
+            <a href="appointment.html">
+                Book Appointment
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+else {
+
+    container.innerHTML = "";
+
+    myAppointments.forEach(
+
+        appointment => {
+
+            container.innerHTML += `
+
+                <div class="mini-appointment">
+
+                    <h3>
+                        👨‍⚕️
+                        ${appointment.doctor}
+                    </h3>
+
+                    <p>
+                        📅
+                        ${appointment.date}
+                    </p>
+
+                    <p>
+                        ⏰
+                        ${appointment.time}
+                    </p>
+
+                    <p>
+                        🩺
+                        <strong>
+                            Health Issue:
+                        </strong>
+
+                        ${appointment.healthIssue}
+                    </p>
+
+                    <p>
+                        📋
+                        <strong>
+                            Symptoms:
+                        </strong>
+
+                        ${appointment.symptoms}
+                    </p>
+
+                    <p>
+                        Status:
+                        <strong>
+                            ${appointment.status}
+                        </strong>
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    );
+
+}
+
+</script>
+
+
+</body>
+</html>

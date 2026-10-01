@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Home Treats - Hospital Appointment System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<script src="auth.js"></script>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <h2>🏥 Home Treats</h2>
+
+    <nav>
+
+        <a href="index.html">
+    Home
+</a>
+
+<a
+    href="doctors.html"
+    onclick="return protectedLink(event)"
+>
+    Doctors
+</a>
+
+<a href="branches.html">
+    Branches
+</a>
+
+<a href="#about">
+    About
+</a>
+        <!-- NOT LOGGED IN -->
+
+        <span id="guestButtons">
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a
+                href="register.html"
+                class="register-nav"
+            >
+                Register
+            </a>
+
+        </span>
+
+
+        <!-- LOGGED IN -->
+
+        <span
+            id="userButtons"
+            style="display:none;"
+        >
+
+            <a href="my-information.html">
+                My Information
+            </a>
+
+            <a
+                href="#"
+                onclick="logout(); return false;"
+            >
+                Logout
+            </a>
+
+        </span>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Your Health, Our Priority.
+        </h1>
+
+        <p>
+            Quality healthcare made simple,
+            accessible and convenient.
+        </p>
+
+
+        <a
+            href="appointment.html"
+            class="hero-button"
+            onclick="return protectedLink(event)"
+        >
+            📅 Book Appointment
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= STATS ================= -->
+
+<section class="stats">
+
+    <div class="stat-card">
+
+        <h2>50+</h2>
+
+        <p>
+            Expert Doctors
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h2>10K+</h2>
+
+        <p>
+            Happy Patients
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h2>24/7</h2>
+
+        <p>
+            Support
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section
+    id="about"
+    class="dashboard-card"
+    style="
+        max-width:1000px;
+        margin:50px auto;
+        text-align:center;
+    "
+>
+
+    <h2>
+        🏥 About Home Treats
+    </h2>
+
+    <p>
+
+        Home Treats is a hospital appointment
+        system designed to make healthcare
+        appointments simple and convenient.
+
+    </p>
+
+    <br>
+
+    <p>
+
+        Patients can explore doctors,
+        book appointments and securely
+        view their appointment information
+        after logging in.
+
+    </p>
+
+</section>
+<!-- ================= OUR BRANCHES ================= -->
+
+<section class="home-branches">
+
+    <h2>🏥 Our Branches</h2>
+
+    <p>
+        Home Treats is available across multiple locations
+    </p>
+
+    <div class="home-branch-list">
+
+        <a href="branches.html">
+            📍 Hyderabad
+        </a>
+
+        <a href="branches.html">
+            📍 Vijayawada
+        </a>
+
+        <a href="branches.html">
+            📍 Secunderabad
+        </a>
+
+        <a href="branches.html">
+            📍 Mumbai
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer
+    style="
+        text-align:center;
+        padding:25px;
+        background:#0568a6;
+        color:white;
+        margin-top:50px;
+    "
+>
+
+    <p>
+        © 2026 Home Treats |
+        Your Health, Our Priority
+    </p>
+
+</footer>
+
+
+<!-- ================= LOGIN STATE ================= -->
+
+<script>
+
+if (isLoggedIn()) {
+
+    document.getElementById(
+        "guestButtons"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "userButtons"
+    ).style.display = "inline";
+
+
+    const user = getCurrentUser();
+
+
+    if (user) {
+
+        const heroText =
+            document.querySelector(
+                ".hero-content p"
+            );
+
+        heroText.textContent =
+            "Welcome back, " +
+            user.name +
+            "! Manage your healthcare with ease.";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>
